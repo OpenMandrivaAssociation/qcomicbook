@@ -16,7 +16,7 @@ License:	GPL
 Requires:	unzip
 BuildRequires:	qt3-devel
 BuildRequires:  ImageMagick
-BuildRequires:	automake
+BuildRequires:	automake imlib2-devel
 
 %description
 QComicBook is a viewer for comic book archives containing jpeg/png 
