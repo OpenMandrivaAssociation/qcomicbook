@@ -1,5 +1,5 @@
 %define	name	qcomicbook
-%define	version	0.3.2
+%define	version	0.3.4
 %define	release	%mkrel 1
 %define summary Comic book archive viewer
 %define group	File tools
@@ -16,6 +16,7 @@ License:	GPL
 Requires:	unzip
 BuildRequires:	qt3-devel
 BuildRequires:  ImageMagick
+BuildRequires:	automake
 
 %description
 QComicBook is a viewer for comic book archives containing jpeg/png 
@@ -37,9 +38,9 @@ images, which aims at convenience and simplicity. Features include:
 %{__perl} -pi -e 's|with_Qt_dir/lib|with_Qt_dir/%{_lib}|' acinclude.m4
 autoreconf --verbose --force --install
 %configure \
-  --with-Qt-dir=%{_libdir}/qt3 \
-  --with-Qt-bin-dir=%{_libdir}/qt3/bin \
-  --with-Qt-lib-dir=%{_libdir}/qt3/%{_lib}
+  --with-Qt-dir=%{qt3dir} \
+  --with-Qt-bin-dir=%{qt3dir}/bin \
+  --with-Qt-lib-dir=%{qt3lib}
 %make
 
 %install
@@ -47,21 +48,24 @@ rm -rf $RPM_BUILD_ROOT
 
 %makeinstall
 
-mkdir -p $RPM_BUILD_ROOT%{_menudir}
 install -m644 ./fedora/qcomicbook.png -D $RPM_BUILD_ROOT%{_iconsdir}/qcomicbook.png
 # Create other icons
 convert ./fedora/qcomicbook.png -resize 48x48 ./qcomicbook-48.png
 convert ./fedora/qcomicbook.png -resize 16x16 ./qcomicbook-16.png
 install -m644 ./qcomicbook-48.png -D $RPM_BUILD_ROOT%{_liconsdir}/qcomicbook.png
 install -m644 ./qcomicbook-16.png -D $RPM_BUILD_ROOT%{_miconsdir}/qcomicbook.png
-cat << EOF > $RPM_BUILD_ROOT%{_menudir}/%{name}
-?package(%{name}):command="%{_bindir}/qcomicbook" \
-icon="qcomicbook.png" \
-needs="x11" \
-section="Multimedia/Graphics" \
-title="QComicBook" \
-longtitle="Comic book archive viewer" \
-xdg="true"
+
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
+cat << EOF >$RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Name=QComicBook
+Comment=Comic book archive viewer
+Exec=%{_bindir}/%{name}
+Icon=qcomicbook
+Terminal=false
+Type=Application
+Categories=Graphics;Viewer;
 EOF
 
 %post
@@ -80,5 +84,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/*
 %{_mandir}/man?/*
 %{_datadir}/%{name}/*
-%{_menudir}/*
-
+%{_datadir}/applications/mandriva-%{name}.desktop
