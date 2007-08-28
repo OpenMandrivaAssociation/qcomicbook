@@ -58,7 +58,6 @@ install -m644 ./qcomicbook-16.png -D $RPM_BUILD_ROOT%{_miconsdir}/qcomicbook.png
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat << EOF >$RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop
 [Desktop Entry]
-Encoding=UTF-8
 Name=QComicBook
 Comment=Comic book archive viewer
 Exec=%{_bindir}/%{name}
