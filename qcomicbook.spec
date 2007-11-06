@@ -1,5 +1,5 @@
 %define	name	qcomicbook
-%define	version	0.3.4
+%define	version	0.4.0
 %define	release	%mkrel 1
 %define summary Comic book archive viewer
 %define group	File tools
@@ -12,11 +12,11 @@ Source0:	%{name}-%{version}.tar.bz2
 URL:		http://linux.bydg.org/~yogin/
 Group:		%{group}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-License:	GPL
+License:	GPLv2+
 Requires:	unzip
-BuildRequires:	qt3-devel
-BuildRequires:  ImageMagick
-BuildRequires:	automake imlib2-devel
+BuildRequires:	qt4-devel >= 4.2.0
+BuildRequires:  imageMmgick
+BuildRequires:	imlib2-devel
 
 %description
 QComicBook is a viewer for comic book archives containing jpeg/png 
