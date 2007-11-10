@@ -14,9 +14,9 @@ Group:		%{group}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License:	GPLv2+
 Requires:	unzip
-BuildRequires:	qt4-devel >= 4.2.0
-BuildRequires:  imageMmgick
+BuildRequires:  imageMagick
 BuildRequires:	imlib2-devel
+BuildRequires:	qt4-devel
 
 %description
 QComicBook is a viewer for comic book archives containing jpeg/png 
