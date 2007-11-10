@@ -1,22 +1,16 @@
-%define	name	qcomicbook
-%define	version	0.4.0
-%define	release	%mkrel 1
-%define summary Comic book archive viewer
-%define group	File tools
-
-Name:		%{name} 
-Summary:	%{summary}
-Version:	%{version} 
-Release:	%{release} 
-Source0:	%{name}-%{version}.tar.bz2
-URL:		http://linux.bydg.org/~yogin/
-Group:		%{group}
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-License:	GPLv2+
-Requires:	unzip
+Name:           qcomicbook
+Version:        0.4.0 
+Release:        %mkrel 1
+Summary:        Comic book archive viewer
+Source0:        %{name}-%{version}.tar.bz2
+URL:            http://linux.bydg.org/~yogin/
+Group:          File tools
+License:        GPLv2+
+Requires:       unzip
 BuildRequires:  imagemagick
-BuildRequires:	imlib2-devel
-BuildRequires:	qt4-devel
+BuildRequires:  imlib2-devel
+BuildRequires:  qt4-devel
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 QComicBook is a viewer for comic book archives containing jpeg/png 
@@ -33,30 +27,14 @@ images, which aims at convenience and simplicity. Features include:
 
 %prep
 %setup -q
-
-%build
+%{__perl} -pi -e 's|moc-qt4|%{qt4dir}/bin/moc|g' src/Makefile.{am,in}
 %{__perl} -pi -e 's|with_Qt_dir/lib|with_Qt_dir/%{_lib}|' acinclude.m4
-autoreconf --verbose --force --install
-%configure \
-  --with-Qt-dir=%{qt3dir} \
-  --with-Qt-bin-dir=%{qt3dir}/bin \
-  --with-Qt-lib-dir=%{qt3lib}
-%make
+%{_bindir}/autoreconf --verbose --force --install
 
-%install
-rm -rf $RPM_BUILD_ROOT
+%{_bindir}/convert fedora/qcomicbook.png -resize 64x64 qcomicbook-64.png
+%{_bindir}/convert fedora/qcomicbook.png -resize 16x16 qcomicbook-16.png
 
-%makeinstall
-
-install -m644 ./fedora/qcomicbook.png -D $RPM_BUILD_ROOT%{_iconsdir}/qcomicbook.png
-# Create other icons
-convert ./fedora/qcomicbook.png -resize 48x48 ./qcomicbook-48.png
-convert ./fedora/qcomicbook.png -resize 16x16 ./qcomicbook-16.png
-install -m644 ./qcomicbook-48.png -D $RPM_BUILD_ROOT%{_liconsdir}/qcomicbook.png
-install -m644 ./qcomicbook-16.png -D $RPM_BUILD_ROOT%{_miconsdir}/qcomicbook.png
-
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
-cat << EOF >$RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop
+%{__cat} << EOF > %{name}.desktop
 [Desktop Entry]
 Name=QComicBook
 Comment=Comic book archive viewer
@@ -67,20 +45,50 @@ Type=Application
 Categories=Graphics;Viewer;
 EOF
 
-%post
-%{update_menus}
+%build
+%{configure2_5x} \
+  --with-Qt-dir=%{qt4dir} \
+  --with-Qt-bin-dir=%{qt4dir}/bin \
+  --with-Qt-lib-dir=%{qt4lib}
+%{make}
 
-%postun
-%{clean_menus}
+%install
+%{__rm} -rf %{buildroot}
+%{makeinstall_std}
+
+%{__mkdir_p} %{buildroot}%{_datadir}/pixmaps
+%{__mkdir_p} %{buildroot}%{_datadir}/icons/hicolor/16x16/apps
+%{__mkdir_p} %{buildroot}%{_datadir}/icons/hicolor/32x32/apps
+%{__mkdir_p} %{buildroot}%{_datadir}/icons/hicolor/64x64/apps
+%{__install} -m 644 fedora/qcomicbook.png %{buildroot}%{_datadir}/pixmaps/qcomicbook.png
+%{__install} -m 644 qcomicbook-16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/qcomicbook.png
+%{__install} -m 644 fedora/qcomicbook.png  %{buildroot}%{_datadir}/icons/hicolor/32x32/apps/qcomicbook.png
+%{__install} -m 644 qcomicbook-64.png %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/qcomicbook.png
+
+%{__mkdir_p} %{buildroot}%{_datadir}/applications
+%{_bindir}/desktop-file-install --vendor mandriva       \
+        --dir %{buildroot}%{_datadir}/applications      \
+        %{name}.desktop
 
 %clean 
-rm -rf $RPM_BUILD_ROOT 
+%{__rm} -rf %{buildroot} 
+
+%post
+%{update_desktop_database}
+%update_icon_cache hicolor
+
+%postun
+%{clean_desktop_database}
+%clean_icon_cache hicolor
 
 %files 
 %defattr(-,root,root)
 %doc AUTHORS README ChangeLog THANKS TODO
-%{_iconsdir}/*
 %{_bindir}/*
-%{_mandir}/man?/*
+%{_datadir}/pixmaps/qcomicbook.png
+%{_datadir}/icons/hicolor/16x16/apps/qcomicbook.png
+%{_datadir}/icons/hicolor/32x32/apps/qcomicbook.png
+%{_datadir}/icons/hicolor/64x64/apps/qcomicbook.png
 %{_datadir}/%{name}/*
 %{_datadir}/applications/mandriva-%{name}.desktop
+%{_mandir}/man?/*
