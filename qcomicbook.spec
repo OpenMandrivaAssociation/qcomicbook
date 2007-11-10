@@ -7,6 +7,9 @@ URL:            http://linux.bydg.org/~yogin/
 Group:          File tools
 License:        GPLv2+
 Requires:       unzip
+Requires(post): desktop-file-utils
+Requires(postun): desktop-file-utils
+BuildRequires:  desktop-file-utils
 BuildRequires:  imagemagick
 BuildRequires:  imlib2-devel
 BuildRequires:  qt4-devel
