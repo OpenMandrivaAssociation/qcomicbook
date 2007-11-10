@@ -14,7 +14,7 @@ Group:		%{group}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 License:	GPLv2+
 Requires:	unzip
-BuildRequires:  imageMagick
+BuildRequires:  imagemagick
 BuildRequires:	imlib2-devel
 BuildRequires:	qt4-devel
 
