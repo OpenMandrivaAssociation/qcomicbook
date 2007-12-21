@@ -13,6 +13,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  imagemagick
 BuildRequires:  imlib2-devel
 BuildRequires:  qt4-devel
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 QComicBook is a viewer for comic book archives containing jpeg/png 
