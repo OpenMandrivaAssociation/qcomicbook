@@ -1,8 +1,8 @@
 Name:           qcomicbook
-Version:        0.4.0 
-Release:        %mkrel 4
+Version:        0.4.1
+Release:        %mkrel 1
 Summary:        Comic book archive viewer
-Source0:        %{name}-%{version}.tar.bz2
+Source0:        http://linux.bydg.org/~yogin/%{name}/%{name}-%{version}.tar.gz
 URL:            http://linux.bydg.org/~yogin/
 Group:          File tools
 License:        GPLv2+
