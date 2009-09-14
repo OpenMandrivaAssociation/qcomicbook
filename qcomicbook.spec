@@ -1,8 +1,9 @@
 Name:           qcomicbook
-Version:        0.4.1
+Version:        0.4.3
 Release:        %mkrel 1
 Summary:        Comic book archive viewer
 Source0:        http://linux.bydg.org/~yogin/%{name}/%{name}-%{version}.tar.gz
+Patch0:		qcomicbook-0.4.3-desktop.patch
 URL:            http://linux.bydg.org/~yogin/
 Group:          File tools
 License:        GPLv2+
@@ -30,23 +31,13 @@ images, which aims at convenience and simplicity. Features include:
 
 %prep
 %setup -q
+%patch0 -p1 -b .desktop
 %{__perl} -pi -e 's|moc-qt4|%{qt4dir}/bin/moc|g' src/Makefile.{am,in}
 %{__perl} -pi -e 's|with_Qt_dir/lib|with_Qt_dir/%{_lib}|' acinclude.m4
 %{_bindir}/autoreconf --verbose --force --install
 
-%{_bindir}/convert fedora/qcomicbook.png -resize 64x64 qcomicbook-64.png
-%{_bindir}/convert fedora/qcomicbook.png -resize 16x16 qcomicbook-16.png
-
-%{__cat} << EOF > %{name}.desktop
-[Desktop Entry]
-Name=QComicBook
-Comment=Comic book archive viewer
-Exec=%{_bindir}/%{name}
-Icon=qcomicbook
-Terminal=false
-Type=Application
-Categories=Graphics;Viewer;
-EOF
+%{_bindir}/convert data/qcomicbook.png -resize 64x64 qcomicbook-64.png
+%{_bindir}/convert data/qcomicbook.png -resize 16x16 qcomicbook-16.png
 
 %build
 %{configure2_5x} \
@@ -63,15 +54,12 @@ EOF
 %{__mkdir_p} %{buildroot}%{_datadir}/icons/hicolor/16x16/apps
 %{__mkdir_p} %{buildroot}%{_datadir}/icons/hicolor/32x32/apps
 %{__mkdir_p} %{buildroot}%{_datadir}/icons/hicolor/64x64/apps
-%{__install} -m 644 fedora/qcomicbook.png %{buildroot}%{_datadir}/pixmaps/qcomicbook.png
+%{__install} -m 644 data/qcomicbook.png %{buildroot}%{_datadir}/pixmaps/qcomicbook.png
 %{__install} -m 644 qcomicbook-16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/qcomicbook.png
-%{__install} -m 644 fedora/qcomicbook.png  %{buildroot}%{_datadir}/icons/hicolor/32x32/apps/qcomicbook.png
+%{__install} -m 644 data/qcomicbook.png  %{buildroot}%{_datadir}/icons/hicolor/32x32/apps/qcomicbook.png
 %{__install} -m 644 qcomicbook-64.png %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/qcomicbook.png
 
 %{__mkdir_p} %{buildroot}%{_datadir}/applications
-%{_bindir}/desktop-file-install --vendor mandriva       \
-        --dir %{buildroot}%{_datadir}/applications      \
-        %{name}.desktop
 
 %clean 
 %{__rm} -rf %{buildroot} 
@@ -93,5 +81,5 @@ EOF
 %{_datadir}/icons/hicolor/32x32/apps/qcomicbook.png
 %{_datadir}/icons/hicolor/64x64/apps/qcomicbook.png
 %{_datadir}/%{name}/*
-%{_datadir}/applications/mandriva-%{name}.desktop
+%{_datadir}/applications/%{name}.desktop
 %{_mandir}/man?/*
