@@ -1,5 +1,5 @@
 Name:           qcomicbook
-Version:        0.4.3
+Version:        0.4.4
 Release:        %mkrel 1
 Summary:        Comic book archive viewer
 Source0:        http://linux.bydg.org/~yogin/%{name}/%{name}-%{version}.tar.gz
