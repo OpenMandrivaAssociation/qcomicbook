@@ -4,7 +4,7 @@ Release:	2
 Summary:	Comic book archive viewer
 Group:		File tools
 License:	GPLv2+
-URL:		http://qcomicbook.linux-projects.net
+URL:		https://qcomicbook.linux-projects.net
 Source0:	http://qcomicbook.linux-projects.net/releases/%{name}-%{version}.tar.gz
 BuildRequires:	cmake
 BuildRequires:	pkgconfig(poppler-qt4)
